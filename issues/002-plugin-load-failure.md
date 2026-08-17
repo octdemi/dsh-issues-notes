@@ -26,9 +26,9 @@ web boot: 1 entry did not activate dsh-script-library: pending (waiting for serv
 
 ### 修改思路（核心）
 
-**换一个更熟悉 DeepSeek Harness 的 agent 来协助修改**：
+**用一个 agent（模型推荐 deepseek 系列）协助修改**：
 
-1. **新建一个 codex / trae 等 agent 会话**，把报错信息完整贴给它（`Failed to load plugins` + `pending (waiting for service: remote.scriptLibrary)`）
+1. **新建一个 agent 会话（codex / trae 等任选，比如我个人用 codex + deepseek-v4-flash）**，把报错信息完整贴给它（`Failed to load plugins` + `pending (waiting for service: remote.scriptLibrary)`）
 2. **同时提供必要的上下文**，让 agent 能定位问题：
    - 插件目录位置（如 `~/.dsh/profiles/node_modules/dsh-script-library/`）
    - 插件注册文件（`~/.dsh/profiles/web/cordis.patch.yml`）
@@ -38,11 +38,11 @@ web boot: 1 entry did not activate dsh-script-library: pending (waiting for serv
    - 是否应该使用直接 RPC / 事件等替代方式，而不是依赖 `ctx.remote`
 4. 让 agent 修改后，**重启 DSH Web 服务验证页面恢复**
 
-### 为什么换 agent
+### 模型选择建议
 
-- 担心**别的模型不了解 DeepSeek Harness** 的插件体系（Cordis 生命周期、boot 图激活机制、依赖注入规则）
-- codex / trae 等 agent 对代码库理解更深，能顺着报错定位到 activation 卡住的根因
-- 也方便在工作区直接编辑插件源码并复测
+- **agent 可任选**（codex / trae / 其他都行），没有限制
+- **模型尽量选 deepseek 系列**（如 `deepseek-v4-flash`、`deepseek-v4-pro`），因为 deepseek 对 DeepSeek Harness 的插件体系（Cordis 生命周期、boot 图激活机制、依赖注入规则）了解更深
+- 我自己的经验：**codex + deepseek-v4-flash** 就能很好地处理这类问题——顺着报错定位到 activation 卡住的根因，直接在工作区编辑插件源码并复测
 
 ### 临时恢复手段
 
